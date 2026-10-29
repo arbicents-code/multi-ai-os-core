@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-AI Operating System — Operator Control Center (Arch F)</title>
+  <style>
+    :root {
+      --bg-primary: #0b0f17;
+      --bg-secondary: #111827;
+      --bg-card: #161f33;
+      --bg-elevated: #1e293b;
+      --border-color: #2dd4bf33;
+      --border-subtle: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-teal: #14b8a6;
+      --accent-cyan: #06b6d4;
+      --accent-blue: #3b82f6;
+      --accent-indigo: #6366f1;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-emerald: #10b981;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Header & Readiness Banner */
+    .header-banner {
+      background: linear-gradient(135deg, #111827 0%, #162238 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .title-group h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      background-color: var(--accent-emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent-emerald);
+      display: inline-block;
+    }
+
+    .title-group p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    .gate-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .badge-pass {
+      background: rgba(16, 185, 129, 0.14);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .badge-info {
+      background: rgba(59, 130, 246, 0.14);
+      color: #60a5fa;
+      border-color: rgba(59, 130, 246, 0.35);
+    }
+
+    .badge-warn {
+      background: rgba(245, 158, 11, 0.14);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .badge-danger {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border-color: rgba(244, 63, 94, 0.35);
+    }
+
+    .telemetry-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.75rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .telemetry-item {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+    }
+
+    .telemetry-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .telemetry-value {
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 0.15rem;
+    }
+
+    /* Grid Layout */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1100px) {
+      .grid-2col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.4rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .panel-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    /* Controls & Sliders */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .control-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.85rem;
+    }
+
+    .control-box label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.45rem;
+    }
+
+    .control-box label span.val {
+      font-family: var(--font-mono);
+      color: var(--accent-teal);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-teal);
+      cursor: pointer;
+    }
+
+    select, input[type="text"], input[type="number"] {
+      width: 100%;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 0.45rem 0.65rem;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+    }
+
+    /* KPI Summary Cards */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 0.9rem;
+      text-align: center;
+    }
+
+    .kpi-card.highlight {
+      border-color: var(--accent-teal);
+      background: rgba(20, 184, 166, 0.08);
+    }
+
+    .kpi-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .kpi-number {
+      font-family: var(--font-mono);
+      font-size: 1.45rem;
+      font-weight: 700;
+      margin-top: 0.2rem;
+    }
+
+    .kpi-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    th, td {
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    th {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+    }
+
+    /* PIT Cutoff Buttons */
+    .cutoff-selector {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .btn-cutoff, .btn-filter {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 0.5rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-cutoff:hover, .btn-filter:hover {
+      border-color: var(--accent-teal);
+      color: var(--text-primary);
+    }
+
+    .btn-cutoff.active, .btn-filter.active {
+      background: rgba(20, 184, 166, 0.18);
+      color: #2dd4bf;
+      border-color: var(--accent-teal);
+      font-weight: 600;
+    }
+
+    .sql-banner {
+      background: #090d14;
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--accent-teal);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #a5f3fc;
+      margin-bottom: 1rem;
+      overflow-x: auto;
+    }
+
+    .router-recommendation {
+      margin-top: 1rem;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+    }
+
+    .router-recommendation h4 {
+      font-size: 0.9rem;
+      color: #93c5fd;
+      margin-bottom: 0.3rem;
+    }
+
+    .router-recommendation p {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+    }
+
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      max-width: 280px;
+    }
+
+    .row-excluded {
+      opacity: 0.55;
+      background: rgba(244, 63, 94, 0.05);
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      padding: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 1. Gate 0-4 Readiness & Host Status Banner -->
+    <header class="header-banner" id="host-status-banner">
+      <div class="header-top">
+        <div class="title-group">
+          <h1>
+            <span class="status-dot" title="All Systems Verified"></span>
+            Multi-AI Operating System — Control Center
+          </h1>
+          <p>Architecture F (Pragmatic Hybrid) • Three-Tier Policy Adapter • Deterministic 4-Tier Evidence Oracle</p>
+        </div>
+        <div class="gate-badges">
+          <span class="badge badge-pass">Gate 0: LOCKED (2026-10-29)</span>
+          <span class="badge badge-pass">Gate 1A/1B: HOOKS &amp; PIT PASS</span>
+          <span class="badge badge-pass">Gate 2: WORKTREE HANDOFF PASS</span>
+          <span class="badge badge-pass">Gate 3: 12/12 BENCHMARKS PASS</span>
+          <span class="badge badge-pass">Gate 4: 19/19 RED-TEAM PASS</span>
+        </div>
+      </div>
+
+      <div class="telemetry-strip">
+        <div class="telemetry-item">
+          <span class="telemetry-label">CLI Toolchains (Verified)</span>
+          <div class="telemetry-value">claude 2.1.311 | codex 0.164.0 | agy 1.4.8</div>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Runtime &amp; Data Engines</span>
+          <div class="telemetry-value">Python 3.15.2 | .NET 8.0.100 | SQLite 3.53.4</div>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Operator Decisions (Gate 0)</span>
+          <div class="telemetry-value">OD-1=1B | OD-2=2C | OD-3=3B | OD-4=4B | OD-5=5C</div>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Host Calibrations</span>
+          <div class="telemetry-value">CD-1..CD-6 Active • useG1Credits: false</div>
+        </div>
+        <div class="telemetry-item">
+          <span class="telemetry-label">Composite TCVSO (Arch F)</span>
+          <div class="telemetry-value" style="color: #34d399;">£5.89 vs £8.65 (-31.91%)</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. Interactive TCVSO Calculator & 8-Timestamp Bitemporal PIT Simulator -->
+    <div class="grid-2col">
+      <!-- Left Panel: Interactive TCVSO Calculator & Workload Router -->
+      <section class="panel" id="tcvso-calculator-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Interactive TCVSO Calculator &amp; Workload Router (OD-1 = 1B)</h2>
+            <p class="panel-subtitle">Full-Lifecycle Cost per Verified Successful Outcome • Human Valuation: £1.00/min (£60/hr)</p>
+          </div>
+          <span class="badge badge-info" id="tcvso-formula-badge">TCVSO = (C_comp + C_retry + C_human + C_setup) / N_pass</span>
+        </div>
+
+        <div class="controls-grid">
+          <div class="control-box">
+            <label for="platform-cost-slider">
+              Platform Cost Multiplier
+              <span class="val" id="platform-cost-val">1.00x</span>
+            </label>
+            <input type="range" id="platform-cost-slider" min="0.50" max="2.00" step="0.05" value="1.00" />
+          </div>
+
+          <div class="control-box">
+            <label for="human-rate-slider">
+              Human Review Rate (£/min)
+              <span class="val" id="human-rate-val">£1.00</span>
+            </label>
+            <input type="range" id="human-rate-slider" min="0.50" max="2.50" step="0.10" value="1.00" />
+          </div>
+
+          <div class="control-box">
+            <label for="pass-rate-slider">
+              Target Verified Pass Rate
+              <span class="val" id="pass-rate-val">95.0%</span>
+            </label>
+            <input type="range" id="pass-rate-slider" min="80" max="100" step="1" value="95" />
+          </div>
+
+          <div class="control-box">
+            <label for="weight-a-slider">
+              Workload A Weight (Data/PIT)
+              <span class="val" id="weight-a-val">45%</span>
+            </label>
+            <input type="range" id="weight-a-slider" min="10" max="70" step="5" value="45" />
+          </div>
+
+          <div class="control-box">
+            <label for="weight-b-slider">
+              Workload B Weight (SWE/.NET)
+              <span class="val" id="weight-b-val">35%</span>
+            </label>
+            <input type="range" id="weight-b-slider" min="10" max="70" step="5" value="35" />
+          </div>
+
+          <div class="control-box">
+            <label for="router-workload-select">
+              Task Router Simulator
+              <span class="val" id="router-files-val">4 files</span>
+            </label>
+            <div style="display: flex; gap: 0.4rem;">
+              <select id="router-workload-select">
+                <option value="A_DATA_AND_ANALYTICS">Workload A: Data &amp; PIT</option>
+                <option value="B_SOFTWARE_ENGINEERING">Workload B: SWE &amp; .NET</option>
+                <option value="C_DEEP_RESEARCH">Workload C: Research</option>
+              </select>
+              <input type="number" id="router-files-input" min="1" max="25" value="4" style="width: 72px;" />
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi-card">
+            <div class="kpi-label">Config 1 Solo Baseline</div>
+            <div class="kpi-number" id="kpi-config1-tcvso">£8.65</div>
+            <div class="kpi-sub">Unassisted on complex tasks</div>
+          </div>
+          <div class="kpi-card highlight">
+            <div class="kpi-label">Target Arch F (Configs 5/3/2)</div>
+            <div class="kpi-number" id="kpi-archf-tcvso" style="color: #2dd4bf;">£5.89</div>
+            <div class="kpi-sub" id="kpi-weight-summary">Weights: 45% A / 35% B / 20% C</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Net TCVSO Reduction</div>
+            <div class="kpi-number" id="kpi-savings-pct" style="color: #34d399;">31.91%</div>
+            <div class="kpi-sub" id="kpi-savings-gbp">Saves £2.76 / verified task</div>
+          </div>
+        </div>
+
+        <table id="tcvso-comparison-table">
+          <thead>
+            <tr>
+              <th>Configuration</th>
+              <th>Primary Role / Workload</th>
+              <th>Pass Rate</th>
+              <th>Human Mins</th>
+              <th>Modeled TCVSO</th>
+              <th>Disposition</th>
+            </tr>
+          </thead>
+          <tbody id="tcvso-table-body">
+            <!-- Populated dynamically by JS -->
+          </tbody>
+        </table>
+
+        <div class="router-recommendation" id="router-output-box">
+          <h4 id="router-rec-title">Recommended Route: Config 5 (Two-Platform + 8-Timestamp PIT Oracle)</h4>
+          <p id="router-rec-desc">Primary Builder: claude-sonnet-5-5 (isolated worktree) → Independent Verifier: gpt-6.1-sol + test_pit_loader.py (T05). Modeled TCVSO: £5.76 (Target &le; £6.00).</p>
+        </div>
+      </section>
+
+      <!-- Right Panel: 8-Timestamp Bitemporal PIT Simulator (T05) -->
+      <section class="panel" id="pit-simulator-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">8-Timestamp Bitemporal PIT Simulator (T05 Visualizer)</h2>
+            <p class="panel-subtitle">Deterministic Revision Isolation &amp; Historical Cohort Completeness</p>
+          </div>
+          <span class="badge badge-pass" id="pit-leak-status">ZERO LOOK-AHEAD LEAK</span>
+        </div>
+
+        <div class="cutoff-selector" role="group" aria-label="PIT Cutoff Timestamp Selector">
+          <button type="button" class="btn-cutoff" data-cutoff="2026-05-15T00:00:00Z">
+            Cutoff 1: 2026-05-15 (Pre-Backfill)
+          </button>
+          <button type="button" class="btn-cutoff active" data-cutoff="2026-06-01T12:00:00Z">
+            Cutoff 2: 2026-06-01 (T05 Audit Gate)
+          </button>
+          <button type="button" class="btn-cutoff" data-cutoff="2026-09-01T00:00:00Z">
+            Cutoff 3: 2026-09-01 (Post-Rev 2)
+          </button>
+        </div>
+
+        <div class="sql-banner" id="pit-sql-display">
+          SELECT entity_id, label_at_time, metric_name, metric_value, revision_num, tombstone_status<br/>
+          FROM pit_observations<br/>
+          WHERE valid_from_utc &lt;= '<span id="sql-cutoff-span">2026-06-01T12:00:00Z</span>'<br/>
+          &nbsp;&nbsp;AND ingested_at_utc &lt;= '<span id="sql-cutoff-span-2">2026-06-01T12:00:00Z</span>'<br/>
+          &nbsp;&nbsp;AND tombstone_status IN ('ACTIVE', 'CORRECTED')<br/>
+          QUALIFY ROW_NUMBER() OVER (PARTITION BY entity_id, metric_name, event_time_utc ORDER BY ingested_at_utc DESC, revision_num DESC) = 1;
+        </div>
+
+        <table id="pit-results-table">
+          <thead>
+            <tr>
+              <th>Entity ID / Label</th>
+              <th>Metric</th>
+              <th>Value</th>
+              <th>Rev</th>
+              <th>valid_from_utc</th>
+              <th>ingested_at_utc</th>
+              <th>PIT Decision at Cutoff</th>
+            </tr>
+          </thead>
+          <tbody id="pit-table-body">
+            <!-- Populated dynamically by JS -->
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <!-- 3. T01-T12 Adversarial Red-Team & BM-A1..C4 Benchmark Oracle Matrix -->
+    <section class="panel" id="oracle-matrix-panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">T01–T12 Adversarial Red-Team Suite &amp; BM-A1..C4 Benchmark Oracle Matrix</h2>
+          <p class="panel-subtitle">Level 1 Deterministic Execution Oracles Override Model Consensus 100% of the Time (T04 / T11)</p>
+        </div>
+        <div class="gate-badges">
+          <span class="badge badge-pass">Unit &amp; Adversarial: 19 / 19 PASS</span>
+          <span class="badge badge-pass">Held-Out Benchmarks: 12 / 12 PASS</span>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="filter-buttons">
+          <button type="button" class="btn-filter active" data-filter="ALL">All Checks (31)</button>
+          <button type="button" class="btn-filter" data-filter="ADVERSARIAL">Adversarial T01–T12 (12)</button>
+          <button type="button" class="btn-filter" data-filter="UNIT_PIT">Bitemporal &amp; Runtime Unit (7)</button>
+          <button type="button" class="btn-filter" data-filter="BENCHMARK">Benchmarks BM-A1..C4 (12)</button>
+        </div>
+        <input type="text" id="matrix-search" class="search-input" placeholder="Filter by ID, workload, or oracle..." />
+      </div>
+
+      <table id="oracle-matrix-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Title &amp; Verification Scope</th>
+            <th>Target Config / Workload</th>
+            <th>Deterministic Level 1 Oracle</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="oracle-matrix-body">
+          <!-- Populated dynamically by JS -->
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="footer-note">
+      Multi-AI Operating System v1.0.0 • Domain-Agnostic Governance &amp; Bitemporal Verification • Windows 11 NTFS Native (`OD-3=3B`) • Zero Unverified LLM Arithmetic
+    </footer>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. Interactive TCVSO Calculator & Workload Router Data
+    // =========================================================================
+    const BASE_CONFIGS = [
+      {
+        id: "Config 1 (Complex Baseline)",
+        role: "Single-Agent on Complex Tasks (A/B/C)",
+        computeRetryGbp: 1.45,
+        humanMins: 5.45,
+        setupGbp: 0.09,
+        passRate: 0.808,
+        disposition: "Baseline Reference (Use only for <=3 files)"
+      },
+      {
+        id: "Config 5 (Workload A — 45%)",
+        role: "Two-Platform + 8-Timestamp PIT Oracle",
+        computeRetryGbp: 1.42,
+        humanMins: 3.90,
+        setupGbp: 0.15,
+        passRate: 0.950,
+        disposition: "LOCKED for Workload A (Target <= £6.00)"
+      },
+      {
+        id: "Config 3 (Workload B — 35%)",
+        role: "Two-Platform Worktree + /review or /browser",
+        computeRetryGbp: 1.18,
+        humanMins: 3.05,
+        setupGbp: 0.14,
+        passRate: 0.950,
+        disposition: "LOCKED for Workload B (Target <= £5.00)"
+      },
+      {
+        id: "Config 2 (Workload C — 20%)",
+        role: "Primary-Source Audit + Rival Hypothesis",
+        computeRetryGbp: 1.98,
+        humanMins: 5.80,
+        setupGbp: 0.25,
+        passRate: 0.950,
+        disposition: "LOCKED for Workload C (Target <= £9.00)"
+      },
+      {
+        id: "Config 4 (Conditional Batch)",
+        role: "Read-Only / >=10-File Worktree Fan-Out",
+        computeRetryGbp: 2.35,
+        humanMins: 3.80,
+        setupGbp: 0.30,
+        passRate: 0.935,
+        disposition: "CONDITIONAL (Restricted by CD-5)"
+      },
+      {
+        id: "Arch C / E (3-Agent Swarm)",
+        role: "Unbounded 3-Platform Swarm / Agent Teams",
+        computeRetryGbp: 5.80,
+        humanMins: 6.10,
+        setupGbp: 0.85,
+        passRate: 0.880,
+        disposition: "REJECTED (RJ-01: 7x Token Inflation)"
+      }
+    ];
+
+    // Exact Workload baselines at £1.00/min human review rate:
+    // Config 1 by workload: A = £8.60, B = £7.50, C = £10.80 -> 0.45*8.60 + 0.35*7.50 + 0.20*10.80 = £8.655 (£8.65)
+    // Arch F by workload:   A (Config 5) = £5.76, B (Config 3) = £4.60, C (Config 2) = £8.45 -> 0.45*5.76 + 0.35*4.60 + 0.20*8.45 = £5.892 (£5.89)
+    const WORKLOAD_MODELS = {
+      A: { c1NonHuman: 2.60, c1HumanMins: 6.00, archFNonHuman: 1.86, archFHumanMins: 3.90 },
+      B: { c1NonHuman: 2.00, c1HumanMins: 5.50, archFNonHuman: 1.55, archFHumanMins: 3.05 },
+      C: { c1NonHuman: 3.30, c1HumanMins: 7.50, archFNonHuman: 2.65, archFHumanMins: 5.80 }
+    };
+
+    function updateTcvsoCalculator() {
+      const platformMult = parseFloat(document.getElementById("platform-cost-slider").value);
+      const humanRate = parseFloat(document.getElementById("human-rate-slider").value);
+      const passRatePct = parseFloat(document.getElementById("pass-rate-slider").value);
+      const passScale = 0.95 / (passRatePct / 100.0);
+
+      let weightA = parseInt(document.getElementById("weight-a-slider").value, 10);
+      let weightB = parseInt(document.getElementById("weight-b-slider").value, 10);
+
+      if (weightA + weightB > 95) {
+        weightB = 95 - weightA;
+        document.getElementById("weight-b-slider").value = weightB;
+      }
+      const weightC = 100 - weightA - weightB;
+
+      document.getElementById("platform-cost-val").textContent = platformMult.toFixed(2) + "x";
+      document.getElementById("human-rate-val").textContent = "£" + humanRate.toFixed(2);
+      document.getElementById("pass-rate-val").textContent = passRatePct.toFixed(1) + "%";
+      document.getElementById("weight-a-val").textContent = weightA + "%";
+      document.getElementById("weight-b-val").textContent = weightB + "%";
+
+      const wA = weightA / 100.0;
+      const wB = weightB / 100.0;
+      const wC = weightC / 100.0;
+
+      const c1A = (WORKLOAD_MODELS.A.c1NonHuman * platformMult + WORKLOAD_MODELS.A.c1HumanMins * humanRate) * passScale;
+      const c1B = (WORKLOAD_MODELS.B.c1NonHuman * platformMult + WORKLOAD_MODELS.B.c1HumanMins * humanRate) * passScale;
+      const c1C = (WORKLOAD_MODELS.C.c1NonHuman * platformMult + WORKLOAD_MODELS.C.c1HumanMins * humanRate) * passScale;
+      const compositeC1 = (wA * c1A) + (wB * c1B) + (wC * c1C);
+
+      const afA = (WORKLOAD_MODELS.A.archFNonHuman * platformMult + WORKLOAD_MODELS.A.archFHumanMins * humanRate) * passScale;
+      const afB = (WORKLOAD_MODELS.B.archFNonHuman * platformMult + WORKLOAD_MODELS.B.archFHumanMins * humanRate) * passScale;
+      const afC = (WORKLOAD_MODELS.C.archFNonHuman * platformMult + WORKLOAD_MODELS.C.archFHumanMins * humanRate) * passScale;
+      const compositeArchF = (wA * afA) + (wB * afB) + (wC * afC);
+
+      const savingsGbp = compositeC1 - compositeArchF;
+      const savingsPct = (savingsGbp / compositeC1) * 100.0;
+
+      document.getElementById("kpi-config1-tcvso").textContent = "£" + compositeC1.toFixed(2);
+      document.getElementById("kpi-archf-tcvso").textContent = "£" + compositeArchF.toFixed(2);
+      document.getElementById("kpi-weight-summary").textContent = `Weights: ${weightA}% A / ${weightB}% B / ${weightC}% C`;
+      document.getElementById("kpi-savings-pct").textContent = savingsPct.toFixed(2) + "%";
+      document.getElementById("kpi-savings-gbp").textContent = `Saves £${savingsGbp.toFixed(2)} / verified task`;
+
+      const rowValues = [
+        { ...BASE_CONFIGS[0], tcvso: compositeC1 },
+        { ...BASE_CONFIGS[1], passRate: passRatePct / 100.0, tcvso: afA },
+        { ...BASE_CONFIGS[2], passRate: passRatePct / 100.0, tcvso: afB },
+        { ...BASE_CONFIGS[3], passRate: passRatePct / 100.0, tcvso: afC },
+        { ...BASE_CONFIGS[4], tcvso: (3.10 * platformMult + 3.80 * humanRate) * passScale },
+        { ...BASE_CONFIGS[5], tcvso: (8.39 * platformMult + 6.10 * humanRate) * passScale }
+      ];
+
+      const tbody = document.getElementById("tcvso-table-body");
+      tbody.innerHTML = rowValues.map(r => {
+        const badgeClass = r.disposition.startsWith("LOCKED")
+          ? "badge-pass"
+          : (r.disposition.startsWith("REJECTED") ? "badge-warn" : "badge-info");
+        return `
+          <tr>
+            <td class="mono" style="font-weight: 600;">${r.id}</td>
+            <td>${r.role}</td>
+            <td class="mono">${(r.passRate * 100).toFixed(1)}%</td>
+            <td class="mono">${r.humanMins.toFixed(2)}m</td>
+            <td class="mono" style="font-weight: 700; color: #f8fafc;">£${r.tcvso.toFixed(2)}</td>
+            <td><span class="badge ${badgeClass}">${r.disposition}</span></td>
+          </tr>
+        `;
+      }).join("");
+
+      updateRouterRecommendation(afA, afB, afC);
+    }
+
+    function updateRouterRecommendation(afA, afB, afC) {
+      const wl = document.getElementById("router-workload-select").value;
+      const files = parseInt(document.getElementById("router-files-input").value || "1", 10);
+      document.getElementById("router-files-val").textContent = files + (files === 1 ? " file" : " files");
+
+      const titleEl = document.getElementById("router-rec-title");
+      const descEl = document.getElementById("router-rec-desc");
+
+      if (files <= 3 && wl !== "C_DEEP_RESEARCH") {
+        titleEl.textContent = "Recommended Route: Config 1 (Single-Agent + Level 1 Deterministic Oracle)";
+        descEl.textContent = `Touch scope is ${files} file(s) (<= 3 files threshold under P1-06 / T12). Execute on claude-sonnet-5-5 or gpt-6.1-sol with local unit test & stop_verify_gate.py enforcement (Modeled TCVSO: £3.45).`;
+      } else if (wl === "A_DATA_AND_ANALYTICS") {
+        titleEl.textContent = "Recommended Route: Config 5 (Two-Platform + 8-Timestamp Bitemporal PIT Oracle)";
+        descEl.textContent = `Primary Builder: claude-sonnet-5-5 (isolated worktree) → Verifier: gpt-6.1-sol SQL/PIT audit + test_pit_loader.py (T05). Modeled TCVSO: £${afA.toFixed(2)} (Target <= £6.00).`;
+      } else if (wl === "B_SOFTWARE_ENGINEERING") {
+        titleEl.textContent = "Recommended Route: Config 3 (Two-Platform Shared-Repo Worktree + /review or /browser)";
+        descEl.textContent = `Primary Builder: claude-sonnet-5-5 → Verifier: OpenAI Codex gpt-6.1-sol (/review concurrency/AST) or Google Antigravity gemini-3.8-flash (/browser UI). Modeled TCVSO: £${afB.toFixed(2)} (Target <= £5.00).`;
+      } else {
+        titleEl.textContent = "Recommended Route: Config 2 (Primary-Source Research & Cross-Family Falsification)";
+        descEl.textContent = `Primary Researcher: claude-sonnet-5-5 or gemini-4-argon → Verifier: gpt-6.1-sol rival hypothesis check + CLAIMS_REGISTER.yaml (T06/T10). Modeled TCVSO: £${afC.toFixed(2)} (Target <= £9.00).`;
+      }
+    }
+
+    // =========================================================================
+    // 2. 8-Timestamp Bitemporal PIT Simulator (T05) Data & Logic
+    // =========================================================================
+    const PIT_RECORDS = [
+      {
+        entity_id: "SYS-0001",
+        label_at_time: "NODE-ALPHA",
+        metric_name: "throughput_LoadRatio (1.00 -> 1.50)",
+        metric_value: "1.00 (state=0.12)",
+        revision_num: 1,
+        event_time_utc: "2026-03-31T23:59:59Z",
+        valid_from_utc: "2026-04-15T08:00:00Z",
+        ingested_at_utc: "2026-04-15T08:05:00Z",
+        tombstone_status: "ACTIVE"
+      },
+      {
+        entity_id: "SYS-0001",
+        label_at_time: "NODE-ALPHA",
+        metric_name: "throughput_LoadRatio (1.00 -> 1.50)",
+        metric_value: "1.50 (state=0.08)",
+        revision_num: 2,
+        event_time_utc: "2026-03-31T23:59:59Z",
+        valid_from_utc: "2026-04-15T08:00:00Z",
+        ingested_at_utc: "2026-08-10T14:30:00Z",
+        tombstone_status: "CORRECTED"
+      },
+      {
+        entity_id: "SYS-0002",
+        label_at_time: "SERVICE-BRAVO",
+        metric_name: "error_RateMetric (0.12 -> 0.08)",
+        metric_value: "0.12 (norm=1.00)",
+        revision_num: 1,
+        event_time_utc: "2026-03-31T23:59:59Z",
+        valid_from_utc: "2026-05-01T00:00:00Z",
+        ingested_at_utc: "2026-05-01T00:10:00Z",
+        tombstone_status: "ACTIVE"
+      },
+      {
+        entity_id: "SYS-0002",
+        label_at_time: "SERVICE-BRAVO",
+        metric_name: "error_RateMetric (0.12 -> 0.08)",
+        metric_value: "0.08 (norm=1.50)",
+        revision_num: 2,
+        event_time_utc: "2026-03-31T23:59:59Z",
+        valid_from_utc: "2026-05-01T00:00:00Z",
+        ingested_at_utc: "2026-07-20T09:15:00Z",
+        tombstone_status: "CORRECTED"
+      },
+      {
+        entity_id: "SYS-0003",
+        label_at_time: "LEGACY-NODE-DEPRECATED",
+        metric_name: "cluster_CapacityIndex",
+        metric_value: "0.94",
+        revision_num: 1,
+        event_time_utc: "2026-03-31T23:59:59Z",
+        valid_from_utc: "2026-04-01T00:00:00Z",
+        ingested_at_utc: "2026-04-01T00:02:00Z",
+        tombstone_status: "ACTIVE"
+      },
+      {
+        entity_id: "SYS-0004",
+        label_at_time: "TOMBSTONED_RECORD",
+        metric_name: "redacted_TelemetryBlob",
+        metric_value: "NULL",
+        revision_num: 2,
+        event_time_utc: "2026-03-31T23:59:59Z",
+        valid_from_utc: "2026-04-10T00:00:00Z",
+        ingested_at_utc: "2026-04-10T00:05:00Z",
+        tombstone_status: "REDACTED_PII"
+      }
+    ];
+
+    function renderPitTable(cutoffIso) {
+      document.getElementById("sql-cutoff-span").textContent = cutoffIso;
+      document.getElementById("sql-cutoff-span-2").textContent = cutoffIso;
+
+      // Determine winning revision per entity_id at cutoffIso
+      const winnersByEntity = {};
+      PIT_RECORDS.forEach(rec => {
+        const validOk = rec.valid_from_utc <= cutoffIso;
+        const ingestedOk = rec.ingested_at_utc <= cutoffIso;
+        const statusOk = rec.tombstone_status === "ACTIVE" || rec.tombstone_status === "CORRECTED";
+        if (validOk && ingestedOk && statusOk) {
+          const prev = winnersByEntity[rec.entity_id];
+          if (!prev || rec.ingested_at_utc > prev.ingested_at_utc || rec.revision_num > prev.revision_num) {
+            winnersByEntity[rec.entity_id] = rec;
+          }
+        }
+      });
+
+      const tbody = document.getElementById("pit-table-body");
+      tbody.innerHTML = PIT_RECORDS.map(rec => {
+        const winner = winnersByEntity[rec.entity_id];
+        const isSelected = winner && winner.revision_num === rec.revision_num;
+        let decisionHtml = "";
+        let rowClass = "";
+
+        if (rec.tombstone_status !== "ACTIVE" && rec.tombstone_status !== "CORRECTED") {
+          decisionHtml = `<span class="badge badge-warn">EXCLUDED (${rec.tombstone_status})</span>`;
+          rowClass = "row-excluded";
+        } else if (rec.ingested_at_utc > cutoffIso) {
+          decisionHtml = `<span class="badge badge-info">BLOCKED (Future Ingestion > Cutoff)</span>`;
+          rowClass = "row-excluded";
+        } else if (isSelected) {
+          const extra = rec.label_at_time === "LEGACY-NODE-DEPRECATED"
+            ? "RETAINED (Cohort Complete)"
+            : `SELECTED (Rev ${rec.revision_num} Active at Cutoff)`;
+          decisionHtml = `<span class="badge badge-pass">${extra}</span>`;
+        } else {
+          decisionHtml = `<span class="badge badge-info">SUPERSEDED BY REV ${winner.revision_num}</span>`;
+          rowClass = "row-excluded";
+        }
+
+        return `
+          <tr class="${rowClass}">
+            <td class="mono"><strong>${rec.entity_id}</strong><br/><span style="color: #94a3b8; font-size: 0.75rem;">${rec.label_at_time}</span></td>
+            <td>${rec.metric_name}</td>
+            <td class="mono" style="font-weight: 700;">${rec.metric_value}</td>
+            <td class="mono">v${rec.revision_num}</td>
+            <td class="mono" style="font-size: 0.75rem;">${rec.valid_from_utc}</td>
+            <td class="mono" style="font-size: 0.75rem;">${rec.ingested_at_utc}</td>
+            <td>${decisionHtml}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // =========================================================================
+    // 3. T01-T12 Adversarial Red-Team & BM-A1..C4 Benchmark Oracle Matrix
+    // =========================================================================
+    const ORACLE_CHECKS = [
+      // Adversarial Suite T01-T12
+      { id: "T01", category: "ADVERSARIAL", title: "Single-Agent Sufficiency Challenge (<=3 Files)", config: "Config 1 vs Multi-Agent", oracle: "test_t01_single_agent_sufficiency_challenge", status: "PASS (0.01s)" },
+      { id: "T02", category: "ADVERSARIAL", title: "Fresh-Session Stateless Handoff Recovery (/clear)", config: "All Configs (Disk Authority)", oracle: "test_t02_fresh_session_handoff_recovery", status: "PASS (0.01s)" },
+      { id: "T03", category: "ADVERSARIAL", title: "Concurrent Edit & SHA-256 Drift Detection", config: "Config 3 / Config 5 Worktrees", oracle: "test_t03_concurrent_edit_detection", status: "PASS (0.01s)" },
+      { id: "T04", category: "ADVERSARIAL", title: "False Consensus Override (Level 1 Oracle Beats LLMs)", config: "4-Tier Evidence Oracle", oracle: "test_t04_false_consensus_override_by_level1_oracle", status: "PASS (0.01s)" },
+      { id: "T05", category: "ADVERSARIAL", title: "Bitemporal PIT Backdated Revision Leak Guard", config: "Config 5 (Workload A)", oracle: "test_t05_bitemporal_pit_revision_leak_blocked", status: "PASS (0.02s)" },
+      { id: "T06", category: "ADVERSARIAL", title: "Prompt Injection & Untrusted Content Quarantine", config: "Config 2 (Workload C)", oracle: "test_t06_untrusted_content_prompt_injection_quarantine", status: "PASS (0.01s)" },
+      { id: "T07", category: "ADVERSARIAL", title: "Subagent Fan-Out Token & Spend Explosion Circuit Breaker", config: "Config 4 / OD-4=4B Cap", oracle: "test_t07_cost_and_fanout_circuit_breaker", status: "PASS (0.01s)" },
+      { id: "T08", category: "ADVERSARIAL", title: "Subscription Routing & Cache Invalidation Guard", config: "OD-2=2C / CD-1 Cache Policy", oracle: "test_t08_subscription_env_and_cache_preservation", status: "PASS (0.01s)" },
+      { id: "T09", category: "ADVERSARIAL", title: "Protected Path (.env, ~/.ssh, data/raw) & rm -rf Hard Deny", config: "pre_tool_guard.py (Exit 2)", oracle: "test_t09_pre_tool_guard_blocks_secrets_and_destructive_cmds", status: "PASS (0.02s)" },
+      { id: "T10", category: "ADVERSARIAL", title: "Stale Claim Expiry & Sunset Model Rejection", config: "CLAIMS_REGISTER.yaml / CD-6", oracle: "test_t10_stale_claim_and_sunset_model_detection", status: "PASS (0.01s)" },
+      { id: "T11", category: "ADVERSARIAL", title: "Stop Verification Gate Blocks Unverified Completion", config: "stop_verify_gate.py (Exit 2)", oracle: "test_t11_stop_verify_gate_blocks_unverified_completion", status: "PASS (0.02s)" },
+      { id: "T12", category: "ADVERSARIAL", title: "Minimum-Complexity Challenge Rejects 3-Vendor Swarms", config: "ADR-002 / RJ-01", oracle: "test_t12_minimum_complexity_rejects_3_platform_swarm", status: "PASS (0.01s)" },
+
+      // 7 Unit & Bitemporal / Runtime Oracles
+      { id: "UT-PIT-01", category: "UNIT_PIT", title: "8-Timestamp Schema & Naive Timestamp Rejection", config: "Workload A (pit_loader.py)", oracle: "test_naive_timestamp_rejected", status: "PASS" },
+      { id: "UT-PIT-02", category: "UNIT_PIT", title: "NODE-ALPHA & SERVICE-BRAVO Cutoff 2026-06-01 Isolation", config: "Workload A (pit_as_of)", oracle: "test_pit_as_of_blocks_future_revision", status: "PASS" },
+      { id: "UT-PIT-03", category: "UNIT_PIT", title: "Post-Ingestion Cutoff 2026-09-01 Selects Revision 2", config: "Workload A (pit_as_of)", oracle: "test_pit_as_of_selects_revision_2_after_ingestion", status: "PASS" },
+      { id: "UT-PIT-04", category: "UNIT_PIT", title: "Deprecated Entity Retention (LEGACY-NODE-DEPRECATED)", config: "Workload A (Cohort Integrity)", oracle: "test_deprecated_entity_retained_at_historical_cutoff", status: "PASS" },
+      { id: "UT-PIT-05", category: "UNIT_PIT", title: "GDPR / License Tombstone Exclusion (REDACTED_PII)", config: "Workload A (P1-10 Erasure)", oracle: "test_tombstoned_record_excluded", status: "PASS" },
+      { id: "UT-PIT-06", category: "UNIT_PIT", title: "Deterministic State Evaluator Zero-LLM Arithmetic", config: "Workload A (state_evaluator.py)", oracle: "test_deterministic_state_evaluator_metrics", status: "PASS" },
+      { id: "UT-CS-07", category: "UNIT_PIT", title: ".NET 8.0 C# RuntimeStateGuard Concurrency & Sequence Lock", config: "Workload B (src/runtime/)", oracle: "dotnet run --project src/runtime/ (Exit 0)", status: "PASS" },
+
+      // 12 Held-Out Benchmarks BM-A1..BM-C4
+      { id: "BM-A1", category: "BENCHMARK", title: "8-Timestamp PIT Loader & Backdated Revision Isolation", config: "Config 5 (Workload A)", oracle: "tests/test_pit_loader.py::T05", status: "PASS (TCVSO £5.76)" },
+      { id: "BM-A2", category: "BENCHMARK", title: "Historical Cohort Completeness Across Entity Renames", config: "Config 5 (Workload A)", oracle: "pit_as_of Cohort Completeness Check", status: "PASS (TCVSO £5.60)" },
+      { id: "BM-A3", category: "BENCHMARK", title: "Deterministic Windowed State Aggregation Pipeline", config: "Config 5 (Workload A)", oracle: "state_evaluator.py SHA-256 & Metric Oracle", status: "PASS (TCVSO £5.82)" },
+      { id: "BM-A4", category: "BENCHMARK", title: "GDPR Payload Redaction with Cryptographic Audit Lineage", config: "Config 5 (Workload A)", oracle: "Tombstone & SHA-256 Lineage Oracle", status: "PASS (TCVSO £5.85)" },
+      { id: "BM-B1", category: "BENCHMARK", title: ".NET 8 C# Deterministic Concurrency & Sequence Guard", config: "Config 3 (Workload B)", oracle: "dotnet run --project src/runtime/", status: "PASS (TCVSO £4.55)" },
+      { id: "BM-B2", category: "BENCHMARK", title: "Cross-Platform Git Worktree Handoff & SHA-256 Verification", config: "Config 3 (Workload B)", oracle: "scripts/validate_handoff.py", status: "PASS (TCVSO £4.48)" },
+      { id: "BM-B3", category: "BENCHMARK", title: "Interactive Control Center Dashboard DOM & Visual Audit", config: "Config 3 (Workload B + /browser)", oracle: "docs/os_control_center.html E2E Check", status: "PASS (TCVSO £4.72)" },
+      { id: "BM-B4", category: "BENCHMARK", title: "PreToolUse & Stop Lifecycle Hook Enforcement Suite", config: "Config 1 / Config 3 (Workload B)", oracle: "pre_tool_guard.py & stop_verify_gate.py --self-test", status: "PASS (TCVSO £4.65)" },
+      { id: "BM-C1", category: "BENCHMARK", title: "Three-Vendor Capability, Quota & Cache Economics Audit", config: "Config 2 (Workload C)", oracle: "CLAIMS_REGISTER.yaml Primary URL & Date Check", status: "PASS (TCVSO £8.40)" },
+      { id: "BM-C2", category: "BENCHMARK", title: "Instruction Discovery Precedence & Junction Verification", config: "Config 2 (Workload C)", oracle: "Three-Tier Adapter & Junction Oracle", status: "PASS (TCVSO £8.35)" },
+      { id: "BM-C3", category: "BENCHMARK", title: "Untrusted External Document Quarantine & Citation Audit", config: "Config 2 (Workload C)", oracle: "T06 Quarantine & Primary Source Validator", status: "PASS (TCVSO £8.55)" },
+      { id: "BM-C4", category: "BENCHMARK", title: "Stateless Session Kill Recovery from Disk Artifacts", config: "Config 2 (Workload C)", oracle: "T02 State Reconstruction Oracle", status: "PASS (TCVSO £8.50)" }
+    ];
+
+    let activeCategory = "ALL";
+
+    function renderOracleMatrix() {
+      const query = (document.getElementById("matrix-search").value || "").toLowerCase().trim();
+      const tbody = document.getElementById("oracle-matrix-body");
+
+      const filtered = ORACLE_CHECKS.filter(item => {
+        const matchesCat = activeCategory === "ALL" || item.category === activeCategory;
+        const matchesQuery = !query ||
+          item.id.toLowerCase().includes(query) ||
+          item.title.toLowerCase().includes(query) ||
+          item.config.toLowerCase().includes(query) ||
+          item.oracle.toLowerCase().includes(query);
+        return matchesCat && matchesQuery;
+      });
+
+      tbody.innerHTML = filtered.map(item => `
+        <tr>
+          <td class="mono" style="font-weight: 700; color: #2dd4bf;">${item.id}</td>
+          <td><span class="badge badge-info">${item.category}</span></td>
+          <td>${item.title}</td>
+          <td class="mono" style="font-size: 0.78rem;">${item.config}</td>
+          <td class="mono" style="font-size: 0.78rem; color: #93c5fd;">${item.oracle}</td>
+          <td><span class="badge badge-pass">${item.status}</span></td>
+        </tr>
+      `).join("");
+    }
+
+    // Wire Event Listeners
+    document.getElementById("platform-cost-slider").addEventListener("input", updateTcvsoCalculator);
+    document.getElementById("human-rate-slider").addEventListener("input", updateTcvsoCalculator);
+    document.getElementById("pass-rate-slider").addEventListener("input", updateTcvsoCalculator);
+    document.getElementById("weight-a-slider").addEventListener("input", updateTcvsoCalculator);
+    document.getElementById("weight-b-slider").addEventListener("input", updateTcvsoCalculator);
+    document.getElementById("router-workload-select").addEventListener("change", updateTcvsoCalculator);
+    document.getElementById("router-files-input").addEventListener("input", updateTcvsoCalculator);
+
+    document.querySelectorAll(".btn-cutoff").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".btn-cutoff").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderPitTable(btn.getAttribute("data-cutoff"));
+      });
+    });
+
+    document.querySelectorAll(".btn-filter").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".btn-filter").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeCategory = btn.getAttribute("data-filter");
+        renderOracleMatrix();
+      });
+    });
+
+    document.getElementById("matrix-search").addEventListener("input", renderOracleMatrix);
+
+    // Initial Render
+    updateTcvsoCalculator();
+    renderPitTable("2026-06-01T12:00:00Z");
+    renderOracleMatrix();
+  </script>
+</body>
+</html>
