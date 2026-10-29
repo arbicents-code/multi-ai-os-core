@@ -16,7 +16,7 @@
   },
   "authoritative_repo_state": {
     "git_branch": "worktree/task-1028-01-pit-filter",
-    "git_head_sha": "8f9d2a1c4b7e605139a2b8c4d5e6f7a8b9c0d1e2",
+    "git_head_sha": "744b24a5834cc94308923807961abef519c8f11d",
     "working_tree_clean": true,
     "modified_files": [
       {

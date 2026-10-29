@@ -1,6 +1,6 @@
 {
   "report_id": "BENCHMARK-REPORT-2026-10-29",
-  "generated_at_utc": "2026-10-29T02:01:35Z",
+  "generated_at_utc": "2026-10-29T02:08:25Z",
   "overall_status": "VERIFIED_PASS",
   "locked_gate_0_decisions": {
     "OD-1": "1B (Risk-Weighted Lock: Workload A=45%, Workload B=35%, Workload C=20%)",
@@ -49,7 +49,7 @@
     "all_passed": true
   },
   "unittest_and_adversarial_suite": {
-    "tests_run": 19,
+    "tests_run": 23,
     "failures": 0,
     "errors": 0,
     "passed": true

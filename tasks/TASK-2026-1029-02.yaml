@@ -1,0 +1,53 @@
+schema_version: "1.0.0"
+task_id: "TASK-2026-1029-02"
+title: "Multi-File OS Control Plane Verification"
+workload_class: "B_SOFTWARE_ENGINEERING"
+complexity: "MODERATE_MULTI_FILE"
+priority: "P1_HIGH"
+status: "IN_PROGRESS"
+tcvso_routing:
+  selected_config: "Config_3"
+  modeled_tcvso_gbp: 4.6
+  config_1_baseline_tcvso_gbp: 6.67
+  multi_platform_justified: true
+  platforms_count: 2
+  rationale: "Multi-file engineering (3 files, MODERATE_MULTI_FILE) routes to Config 3 (modeled TCVSO drops from £6.67 to £4.60, -31.0%)."
+assigned_runtime:
+  vendor: "Anthropic"
+  product: "Claude Code"
+  model: "claude-sonnet-5-5"
+  effort: "medium"
+  worktree_branch: "worktree/task-2026-1029-02"
+  permission_mode: "acceptEdits"
+inputs:
+  authoritative_specs:
+    - path: "AGENTS.md"
+      sha256: "bc9f178ac94b59f71132ad57e3d2e404ea6365e6d3f257c31ce7f501964e102b"
+    - path: "GOALS.md"
+      sha256: "fab5b5868370440e145a3b62799d40250dc7a2dff7c4187fba0014c8732b9ac8"
+  target_files:
+    - "scripts/os_ctl.py"
+    - "tests/test_os_ctl.py"
+    - "scripts/run_benchmark_suite.py"
+constraints:
+  data_classification: "INTERNAL_CONFIDENTIAL"
+  network_access: "DENIED"
+  forbidden_paths:
+    - "data/raw/**"
+    - ".env*"
+  budget_bounds:
+    max_wall_clock_minutes: 15
+    max_api_cost_gbp: 1.5
+    max_retries: 2
+acceptance_oracle:
+  deterministic_commands:
+    - "python -m unittest discover -s tests -v"
+    - "python scripts/validate_handoff.py"
+  required_exit_code: 0
+  independent_reviewer:
+    vendor: "OpenAI"
+    product: "Codex CLI"
+    command: "codex exec -m gpt-6.1-sol --sandbox read-only 'Audit git diff against tasks/TASK-2026-1029-02.yaml'"
+timestamps:
+  created_at_utc: "2026-10-29T02:08:08Z"
+  updated_at_utc: "2026-10-29T02:08:08Z"
