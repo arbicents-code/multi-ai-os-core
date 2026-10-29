@@ -1,0 +1,7 @@
+{
+  "capacity_units": 38500.0,
+  "entity_id": "SYS-0001",
+  "period_end": "2026-03-31",
+  "report_type": "QUARTERLY_BENCHMARK",
+  "system_name": "Compute Node Alpha"
+}

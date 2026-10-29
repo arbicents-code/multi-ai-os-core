@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "engine": "sqlite3",
+  "db_path": "C:/Users/Public/Documents/Multi-AI Operating System/data/pit_store/pit_store.db",
+  "schema_sql_path": "C:/Users/Public/Documents/Multi-AI Operating System/data/pit_store/schema.sql",
+  "payload_root": "C:/Users/Public/Documents/Multi-AI Operating System/data/payloads",
+  "counts": {
+    "total_observations": 13,
+    "active_observations": 12,
+    "tombstoned_observations": 1
+  },
+  "store_state_sha256": "410f7cc0b6ebfff575b27ee9e211ffdc46a3fcb4cd331de7722b7272b950aaed"
+}

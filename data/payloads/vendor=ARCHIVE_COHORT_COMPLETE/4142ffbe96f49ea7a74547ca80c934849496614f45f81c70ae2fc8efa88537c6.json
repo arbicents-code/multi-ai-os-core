@@ -1,0 +1,7 @@
+{
+  "capacity_units": 1200.0,
+  "entity_id": "SYS-9999",
+  "period_end": "2026-03-31",
+  "report_type": "QUARTERLY_BENCHMARK",
+  "system_name": "Legacy Node (Decommissioned in Q3 2026)"
+}

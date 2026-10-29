@@ -1,0 +1,36 @@
+# GOALS.md — Multi-AI Operating System Programme Objectives & Acceptance Gates
+
+## 1. Operating Objective
+Establish the least complex, empirically verifiable independent and collaborative operating configurations across **Anthropic Claude/Claude Code**, **OpenAI ChatGPT/Codex**, and **Google Antigravity** that satisfy hard accuracy, chronological-integrity, and security constraints while minimising **Total Cost per Verified Successful Outcome (TCVSO)**.
+
+## 2. Primary Economic Objective Function (TCVSO)
+Among candidate configurations that satisfy 100% of mandatory hard constraints, efficiency is evaluated via the full-lifecycle TCVSO metric (P0-02, P1-11):
+
+$$\text{TCVSO} = \frac{\sum_{i=1}^{N_{\text{total}}} \left( C_{\text{compute}, i} + C_{\text{retry}, i} + C_{\text{human}, i} + C_{\text{setup\_amortised}, i} \right)}{N_{\text{verified\_pass}}}$$
+
+- If $N_{\text{verified\_pass}} = 0$, $\text{TCVSO}$ is strictly reported as `Undefined`.
+- Human supervision, diff review, and repair time ($C_{\text{human}}$) is valued at the UK operator baseline of **£1.00/minute (£60.00/hour)**.
+- Candidate systems failing any mandatory hard constraint are disqualified regardless of raw token cost or generation speed.
+
+## 3. Priority Workloads, Hard Constraints & Target TCVSO Thresholds
+
+| Workload Class | Scope & Representative Deliverables | Mandatory Hard Constraints (Non-Negotiable) | Target Acceptance Thresholds |
+| :--- | :--- | :--- | :--- |
+| **Workload A (`A_DATA_AND_ANALYTICS`): Data Engineering, Analytical Pipelines & Bitemporal State Integrity** | Python 3.12+ / DuckDB / SQLite / Parquet analytical pipelines, deterministic state evaluators (`src/bitemporal/`), and strict point-in-time (PIT) bitemporal state integrity. | 1. **Zero PIT Leakage (T05):** Historical queries at cutoff $t_c$ must satisfy `valid_from_utc <= t_c AND ingested_at_utc <= t_c`.<br>2. **Zero LLM Arithmetic:** All numerical aggregations, statistical metrics, latency/throughput calculations, and deterministic state transitions execute in deterministic code.<br>3. **100% Provenance Traceability:** Every output links to dataset SHA-256, script commit SHA, and UTC timestamp. | • **Numeric & Chronological Accuracy:** 100% match vs deterministic oracle.<br>• **Max Human Review Time:** $\le 5.0$ mins/task.<br>• **Target TCVSO:** $\le \text{£6.00}$ per verified analytical module (Modeled Config 5: £5.76). |
+| **Workload B (`B_SOFTWARE_ENGINEERING`): Software Engineering, Multi-File Systems & Runtime Concurrency** | Multi-file backend/frontend modules, .NET 8 C# deterministic state/concurrency guards (`src/runtime/`), HTML/UI tools, deterministic test suites, and isolated Git worktree maintenance. | 1. **Deterministic Verification Gate (T11):** 100% of unit, integration, linter, and static typechecks pass before completion is logged.<br>2. **Sandbox Containment (T09):** Zero unauthorised writes outside workspace roots or to `.git`, `.env*`, `~/.ssh`.<br>3. **Clean Worktree Merge (T03):** Zero silent lost updates during concurrent edits. | • **First-Pass + Auto-Retry Verified Pass Rate:** $\ge 95\%$ on held-out test oracle.<br>• **Post-Merge Defect Escape Rate:** 0 critical/high bugs.<br>• **Target TCVSO:** $\le \text{£5.00}$ per verified feature/refactor (Modeled Config 3: £4.60). |
+| **Workload C (`C_DEEP_RESEARCH`): Deep Technical Research & Stateless Continuity** | Multi-source technical synthesis, primary-source claim auditing (`research/CLAIMS_REGISTER.yaml`, `research/SOURCES_LOG.jsonl`), untrusted content quarantine (`T06`), and stateless cross-session recovery (`tasks/`, `handoffs/`, `T02`). | 1. **Primary-Source Grounding:** 100% of consequential claims carry verifiable primary URLs, version dates, and evidence classifications.<br>2. **Untrusted Content Isolation (T06):** Retrieved web/PDF content never acquires instruction authority.<br>3. **Stateless Session Recovery (T02):** 100% state reconstruction in a fresh session after `/clear` or process kill. | • **Citation & Claim Verification Rate:** 100% verified against primary source; 0 fabricated citations.<br>• **Fresh-Session Recovery Time:** $\le 2.0$ mins with 0 missing decisions.<br>• **Target TCVSO:** $\le \text{£9.00}$ per audited research brief (Modeled Config 2: £8.45). |
+
+## 4. Explicit Exclusions (Non-Goals) & Stopping Rules (P0-01)
+1. **No Autonomous Production Mutations:** Zero autonomous live production mutations or external side-effecting API executions.
+2. **No Unapproved Production Pushes:** Zero unapproved modifications to production repositories or external cloud deployments.
+3. **No Forced Three-Platform Swarms (P1-06):** Never use 3-platform automated orchestration where a single agent + deterministic oracle (Config 1) or two-platform shared-repo handoff (Config 2/3/5) meets constraints at lower TCVSO.
+4. **No ToS-Violating Quota Workarounds:** Never wrap consumer `agy -p` or interactive Claude subscriptions inside third-party multi-tenant harnesses.
+5. **Mandatory Stopping Rules:** Immediately terminate any architectural branch if (a) a required cross-platform handoff is unsupported by current account entitlements, (b) a candidate violates any hard constraint (PIT leakage, sandbox escape), or (c) a simpler baseline achieves within 2% verified pass rate at lower total operating cost.
+
+## 5. Stage & Phase Exit Gates
+- **Gate 0 (Scope, Charter & Constraints — LOCKED 2026-10-29):** Operator confirmed **`OD-1 = 1B`** (Risk-weighted lock: Workload A = 45%, Workload B = 35%, Workload C = 20%), **`OD-2 = 2C`** (Subscription-first + zero global API keys + `useG1Credits: false`), **`OD-3 = 3B`** (Native Windows 11 NTFS + PowerShell + Python-backed hooks), **`OD-4 = 4B`** (£0 overage subscription-quota baseline), and **`OD-5 = 5C`** (OS-enforced `workspace-write` sandbox + hard `deny` rules + human gate on external/destructive actions).
+- **Gate 1A (Foundation & Security Hardening — PASSED):** Three-Tier Policy Adapter deployed (`AGENTS.md` <120 lines / <6 KB, `CLAUDE.md` 15-line adapter, `.claude/skills` junction); Adversarial Test **T09** (Permission Challenge) and **T11** (Stop Hook Evidence Gate) pass with 100% deterministic enforcement.
+- **Gate 1B (Mandatory Standalone Pilot & PIT Store — PASSED):** Eight-timestamp bitemporal schema and `pit_as_of` query macro verified against **T05** (`SYS-0002` / `SERVICE-BRAVO` Q1 revision leak check returns `1.00` at `2026-05-15T00:00:00Z` and `SYS-0001` / `NODE-ALPHA` returns `0.12` at `2026-06-01T00:00:00Z`, zero leak of August revisions); **T02** fresh-session handoff recovery passes with 0 lost decisions.
+- **Gate 2 (Two-Platform Shared-Repo Integration — PASSED):** Cross-family review (`tasks/*.yaml` + `handoffs/*.json`) completes with zero instruction precedence conflicts and catches seeded defects (**T01**, **T03**, **T04**, **T12**).
+- **Gate 3 (Controlled Benchmark & Selective Automation — PASSED):** Preregistered 12-task benchmark suite (`BM-A1`..`BM-C4`) evaluated via deterministic held-out oracles with zero AI self-scoring (`12/12 PASSED`).
+- **Gate 4 (Operational Acceptance & Version-Drift Cadence — PASSED):** Full **T01–T12** adversarial regression suite passes (`19/19 unittests OK`); `research/CLAIMS_REGISTER.yaml` freshness verified with zero expired high-impact claims (**T10**).

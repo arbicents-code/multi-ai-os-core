@@ -1,0 +1,76 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "disableBypassPermissionsMode": "disable",
+    "deny": [
+      "Read(.env*)",
+      "Edit(.env*)",
+      "Write(.env*)",
+      "Read(~/secrets/**)",
+      "Read(secrets/**)",
+      "Edit(secrets/**)",
+      "Read(~/.ssh/**)",
+      "Edit(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Edit(~/.aws/**)",
+      "Read(**/credentials*)",
+      "Edit(**/credentials*)",
+      "Edit(data/raw/**)",
+      "Write(data/raw/**)",
+      "Edit(.git/**)",
+      "Edit(.claude/settings.json)",
+      "Bash(rm -rf *)",
+      "Bash(git push --force*)",
+      "Bash(git push *)",
+      "Bash(git reset --hard*)",
+      "Bash(curl *)",
+      "Bash(wget *)"
+    ],
+    "allow": [
+      "Edit(src/bitemporal/**)",
+      "Edit(src/runtime/**)",
+      "Bash(python -m unittest *)",
+      "Bash(pytest *)",
+      "Bash(mypy *)",
+      "Bash(python scripts/validate_handoff.py*)",
+      "Bash(python scripts/ingest_pit.py*)",
+      "Bash(python scripts/hooks/*)",
+      "Bash(dotnet run*)",
+      "Bash(dotnet test*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git rev-parse*)"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "0",
+    "CLAUDE_CODE_PROMPT_CACHE_TTL": "1h"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python scripts/hooks/pre_tool_guard.py",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python scripts/hooks/stop_verify_gate.py",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

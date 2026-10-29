@@ -1,0 +1,47 @@
+schema_version: "1.0.0"
+task_id: "TASK-2026-1028-01"
+title: "Implement Bitemporal As-Of Filter for Deterministic State Evaluator"
+workload_class: "A_DATA_AND_ANALYTICS"
+priority: "P0_CRITICAL"
+status: "VERIFIED_COMPLETE"
+assigned_runtime:
+  vendor: "Anthropic"
+  product: "Claude Code"
+  model: "claude-sonnet-5-5"
+  effort: "high"
+  worktree_branch: "worktree/task-1028-01-pit-filter"
+  permission_mode: "acceptEdits"
+inputs:
+  authoritative_specs:
+    - path: "GOALS.md"
+      sha256: "fab5b5868370440e145a3b62799d40250dc7a2dff7c4187fba0014c8732b9ac8"
+    - path: "data/pit_store/schema.sql"
+      sha256: "fb2b8664fc71ee33017772ed3b7c89e8bdd34f03d8a6f003330f640676c75eb5"
+  target_files:
+    - "src/bitemporal/pit_loader.py"
+    - "src/bitemporal/state_evaluator.py"
+    - "scripts/ingest_pit.py"
+    - "tests/test_pit_loader.py"
+constraints:
+  data_classification: "INTERNAL_CONFIDENTIAL"
+  network_access: "DENIED"
+  forbidden_paths:
+    - "data/raw/**"
+    - ".env*"
+  budget_bounds:
+    max_wall_clock_minutes: 15
+    max_api_cost_gbp: 1.50
+    max_retries: 2
+acceptance_oracle:
+  deterministic_commands:
+    - "python scripts/ingest_pit.py"
+    - "pytest tests/test_pit_loader.py -v --tb=short"
+    - "mypy --strict src/bitemporal/pit_loader.py"
+  required_exit_code: 0
+  independent_reviewer:
+    vendor: "OpenAI"
+    product: "Codex CLI"
+    command: "codex exec -m gpt-6.1-sol --sandbox read-only 'Audit git diff against tasks/TASK-2026-1028-01.yaml'"
+timestamps:
+  created_at_utc: "2026-10-28T22:30:00Z"
+  updated_at_utc: "2026-10-29T01:55:00Z"

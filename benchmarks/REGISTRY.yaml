@@ -1,0 +1,164 @@
+schema_version: "1.0.0"
+registry_id: "BENCHMARK-REGISTRY-2026-10-28"
+governance_status: "PREREGISTERED_GATE_2"
+evidence_policy: "ZERO_AI_SELF_SCORING_HELD_OUT_DETERMINISTIC_ORACLE_ONLY"
+experimental_controls:
+  repeats_per_task: 3
+  max_auto_retries: 2
+  wall_clock_timeout_minutes: 15
+  incremental_budget_cap_gbp: 40.00
+  operator_rate_gbp_per_minute: 1.00
+  min_tcvso_improvement_for_multi_agent: 0.15
+
+workloads:
+  A_DATA_AND_ANALYTICS:
+    name: "Workload A: High-Integrity Data & Quantitative Analytics"
+    weight: 0.45
+    target_tcvso_gbp: 6.00
+    max_human_review_minutes: 5.0
+    recommended_config: "Config_5_High_Integrity_Analytics"
+  B_SOFTWARE_ENGINEERING:
+    name: "Workload B: Software Engineering & Repository Work"
+    weight: 0.35
+    target_tcvso_gbp: 5.00
+    min_verified_pass_rate: 0.95
+    recommended_config: "Config_3_Software_Dev_Performance"
+  C_DEEP_RESEARCH:
+    name: "Workload C: Deep Technical Research & Verification Continuity"
+    weight: 0.20
+    target_tcvso_gbp: 9.00
+    max_recovery_minutes: 2.0
+    recommended_config: "Config_2_Research_Analytical"
+
+tasks:
+  - task_id: "BM-A1"
+    workload: "A_DATA_AND_ANALYTICS"
+    title: "DuckDB/SQLite Bitemporal PIT As-Of Loader with Retroactive Revision Isolation"
+    complexity: "HIGH_MULTI_FILE"
+    recommended_config: "Config_5"
+    target_tcvso_gbp: 5.76
+    single_agent_baseline_tcvso_gbp: 7.20
+    oracle_type: "DETERMINISTIC_UNIT_AND_PIT_INVARIANT"
+    oracle_assertion: "pit_as_of('2026-06-01T12:00:00Z') returns SERVICE-BRAVO reliability_index=0.12 and NODE-ALPHA throughput_score=1.00 at 2026-05-15T00:00:00Z with zero leakage of August revisions"
+    held_out_oracle_id: "oracle_bm_a1_pit_loader"
+
+  - task_id: "BM-A2"
+    workload: "A_DATA_AND_ANALYTICS"
+    title: "C# Runtime Async State-Transition Race Condition & Idempotency Guard"
+    complexity: "HIGH_CONCURRENCY"
+    recommended_config: "Config_5"
+    target_tcvso_gbp: 5.85
+    single_agent_baseline_tcvso_gbp: 7.40
+    oracle_type: "DETERMINISTIC_SIMULATION_INVARIANT"
+    oracle_assertion: "Deterministic state-transition guard rejects duplicate async callbacks and enforces zero net state drift across simulated events"
+    held_out_oracle_id: "oracle_bm_a2_state_transition_race"
+
+  - task_id: "BM-A3"
+    workload: "A_DATA_AND_ANALYTICS"
+    title: "Python Cross-Sectional State Evaluator & Historical Cohort Completeness Filter"
+    complexity: "MEDIUM_HIGH_ANALYTICS"
+    recommended_config: "Config_5"
+    target_tcvso_gbp: 5.50
+    single_agent_baseline_tcvso_gbp: 6.90
+    oracle_type: "DETERMINISTIC_EVALUATOR_ORACLE"
+    oracle_assertion: "Evaluator retains historical active entities prior to decommissioning and computes exact composite rankings with zero LLM arithmetic"
+    held_out_oracle_id: "oracle_bm_a3_state_evaluator"
+
+  - task_id: "BM-A4"
+    workload: "A_DATA_AND_ANALYTICS"
+    title: "Temporal Evaluation Report Generator with SHA-256 Provenance Manifest"
+    complexity: "HIGH_PROVENANCE"
+    recommended_config: "Config_5"
+    target_tcvso_gbp: 5.92
+    single_agent_baseline_tcvso_gbp: 7.30
+    oracle_type: "DETERMINISTIC_MANIFEST_CHECKSUM"
+    oracle_assertion: "Generated evaluation manifest links every metric to dataset_sha256, transform_git_sha, and bitemporal_cutoff_utc with 100% checksum validity"
+    held_out_oracle_id: "oracle_bm_a4_provenance_manifest"
+
+  - task_id: "BM-B1"
+    workload: "B_SOFTWARE_ENGINEERING"
+    title: "Single-File Regex & Input Validation Edit"
+    complexity: "LOW_SINGLE_FILE"
+    recommended_config: "Config_1"
+    target_tcvso_gbp: 1.85
+    single_agent_baseline_tcvso_gbp: 1.85
+    oracle_type: "DETERMINISTIC_UNIT_TEST"
+    oracle_assertion: "Routes to Config 1 (Single-Platform) under T12 minimum-complexity rule and passes 100% of boundary regex validation assertions"
+    held_out_oracle_id: "oracle_bm_b1_single_file_validation"
+
+  - task_id: "BM-B2"
+    workload: "B_SOFTWARE_ENGINEERING"
+    title: "Multi-File FastAPI/React Service Authentication & Worktree Refactor"
+    complexity: "HIGH_MULTI_FILE"
+    recommended_config: "Config_3"
+    target_tcvso_gbp: 4.60
+    single_agent_baseline_tcvso_gbp: 6.67
+    oracle_type: "DETERMINISTIC_INTEGRATION_TEST"
+    oracle_assertion: "Worktree isolation prevents concurrent state_version overwrite (T03) and passes token verification and RBAC boundary checks"
+    held_out_oracle_id: "oracle_bm_b2_auth_worktree_refactor"
+
+  - task_id: "BM-B3"
+    workload: "B_SOFTWARE_ENGINEERING"
+    title: "Interactive HTML System Dashboard Build + Headless UI Structure Verification"
+    complexity: "MEDIUM_UI_VERIFICATION"
+    recommended_config: "Config_3"
+    target_tcvso_gbp: 4.75
+    single_agent_baseline_tcvso_gbp: 6.40
+    oracle_type: "DETERMINISTIC_DOM_AND_CSP_ORACLE"
+    oracle_assertion: "Dashboard HTML/JS passes deterministic DOM integrity check and contains zero external credential leaks or inline script injection vulnerabilities"
+    held_out_oracle_id: "oracle_bm_b3_dashboard_ui_oracle"
+
+  - task_id: "BM-B4"
+    workload: "B_SOFTWARE_ENGINEERING"
+    title: "Interrupted-Session Recovery Mid-Refactor (Adversarial Scenario T02)"
+    complexity: "HIGH_CONTINUITY"
+    recommended_config: "Config_3"
+    target_tcvso_gbp: 4.40
+    single_agent_baseline_tcvso_gbp: 6.80
+    oracle_type: "DETERMINISTIC_STATE_RECONSTRUCTION"
+    oracle_assertion: "Fresh session reconstructs 100% of material decisions, modified file SHA-256 digests, and next actions from tasks/*.yaml and handoffs/*.json within 2.0 minutes"
+    held_out_oracle_id: "oracle_bm_b4_session_recovery"
+
+  - task_id: "BM-C1"
+    workload: "C_DEEP_RESEARCH"
+    title: "Primary-Source Vendor API & Deprecation Calendar Verification"
+    complexity: "MEDIUM_RESEARCH"
+    recommended_config: "Config_2"
+    target_tcvso_gbp: 8.20
+    single_agent_baseline_tcvso_gbp: 14.80
+    oracle_type: "DETERMINISTIC_CLAIMS_REGISTER_AUDIT"
+    oracle_assertion: "100% of claims in CLAIMS_REGISTER.yaml carry verified primary_urls, verified_date, recheck_date, and flag retired models (T10)"
+    held_out_oracle_id: "oracle_bm_c1_primary_source_audit"
+
+  - task_id: "BM-C2"
+    workload: "C_DEEP_RESEARCH"
+    title: "150-Page Technical Specification Structured Table Extraction Against Ground Truth"
+    complexity: "HIGH_EXTRACTION"
+    recommended_config: "Config_2"
+    target_tcvso_gbp: 8.45
+    single_agent_baseline_tcvso_gbp: 15.37
+    oracle_type: "DETERMINISTIC_SCHEMA_AND_NUMERIC_DIFF"
+    oracle_assertion: "Extracted specification table matches ground-truth schema and numeric totals to 1e-6 precision with untrusted prompt injections quarantined (T06)"
+    held_out_oracle_id: "oracle_bm_c2_spec_extraction"
+
+  - task_id: "BM-C3"
+    workload: "C_DEEP_RESEARCH"
+    title: "Adversarial False-Consensus Trap with Misleading Fixture (Scenario T04)"
+    complexity: "HIGH_ADVERSARIAL"
+    recommended_config: "Config_2"
+    target_tcvso_gbp: 8.60
+    single_agent_baseline_tcvso_gbp: 15.90
+    oracle_type: "LEVEL_1_EVIDENCE_HIERARCHY_ORACLE"
+    oracle_assertion: "Level 1 deterministic execution oracle overrides unanimous multi-LLM agreement on a flawed look-ahead formula 100% of the time"
+    held_out_oracle_id: "oracle_bm_c3_false_consensus_trap"
+
+  - task_id: "BM-C4"
+    workload: "C_DEEP_RESEARCH"
+    title: "Multi-Session Research Synthesis & Cross-Platform Policy Audit"
+    complexity: "HIGH_SYNTHESIS"
+    recommended_config: "Config_2"
+    target_tcvso_gbp: 8.55
+    single_agent_baseline_tcvso_gbp: 15.40
+    oracle_type: "DETERMINISTIC_POLICY_INVARIANT_ORACLE"
+    oracle_assertion: "Audits AGENTS.md (<120 lines), CLAUDE.md (@AGENTS.md first line), and .agents/rules/*.md (snake_case triggers, <24KB) with zero policy drift"
+    held_out_oracle_id: "oracle_bm_c4_policy_synthesis_audit"

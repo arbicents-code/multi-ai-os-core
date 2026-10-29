@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "command": "python scripts/hooks/pre_tool_guard.py",
+        "timeoutSeconds": 15,
+        "description": "Deterministic T09 security guard blocking .env*, ~/.ssh, ~/.aws, data/raw writes, and destructive shell commands."
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "command": "python scripts/hooks/stop_verify_gate.py",
+        "timeoutSeconds": 60,
+        "description": "Deterministic T11 verification gate requiring passing unit tests and valid handoff state before completion."
+      }
+    ]
+  }
+}

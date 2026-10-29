@@ -1,0 +1,8 @@
+{
+  "audit_note": "Initial Q1 2026 release (Section 16 T05 reference fixture)",
+  "entity_id": "SYS-0002",
+  "period_end": "2026-03-31",
+  "reliability_index": 0.12,
+  "report_type": "REGIONAL_SLO_REPORT",
+  "system_name": "Service Bravo EU"
+}

@@ -1,0 +1,8 @@
+{
+  "audit_note": "Backdated recalibration ingested 2026-08-10 (Section 16 T05 reference fixture)",
+  "entity_id": "SYS-0002",
+  "period_end": "2026-03-31",
+  "reliability_index": 0.08,
+  "report_type": "REGIONAL_SLO_AMENDED",
+  "system_name": "Service Bravo EU"
+}

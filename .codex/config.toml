@@ -1,0 +1,37 @@
+# OpenAI Codex CLI & ChatGPT Work Configuration (Verified 28 Oct 2026 — v0.159.0+)
+# Note: Retired `approval_policy = "untrusted"` is strictly omitted (QW-03).
+
+model = "gpt-6.1-sol"
+review_model = "gpt-6.1-sol"
+model_reasoning_effort = "medium"
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+web_search = "cached"
+project_doc_max_bytes = 32768
+
+[features]
+codex_hooks = true
+
+[agents]
+default_subagent_model = "gpt-6-luna"
+max_concurrent_threads_per_session = 4
+
+[sandbox_workspace_write]
+network_access = false
+exclude_tmpdir_env_var = false
+
+[permissions.filesystem]
+deny_read = [
+  "**/.env*",
+  "~/.ssh/**",
+  "~/.aws/**",
+  "**/secrets/**",
+  "**/credentials*"
+]
+deny_write = [
+  "**/.env*",
+  "~/.ssh/**",
+  "~/.aws/**",
+  "data/raw/**",
+  ".git/config"
+]

@@ -1,0 +1,32 @@
+# Python byte-compiled / cache / virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Environment variables, credentials & secrets
+.env
+.env*
+secrets/
+**/credentials*
+*.pem
+*.key
+
+# Multi-agent isolated Git worktrees & local runtime state
+worktrees/
+*.duckdb.wal
+*.tmp
+
+# .NET / cTrader C# build artifacts
+bin/
+obj/
+TestResults/
+*.user
+
+# OS / Editor metadata
+.DS_Store
+Thumbs.db

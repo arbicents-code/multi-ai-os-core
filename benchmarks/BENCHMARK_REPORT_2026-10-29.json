@@ -1,0 +1,93 @@
+{
+  "report_id": "BENCHMARK-REPORT-2026-10-29",
+  "generated_at_utc": "2026-10-29T02:01:35Z",
+  "overall_status": "VERIFIED_PASS",
+  "locked_gate_0_decisions": {
+    "OD-1": "1B (Risk-Weighted Lock: Workload A=45%, Workload B=35%, Workload C=20%)",
+    "OD-2": "2C (Subscription-First + Zero Global API Keys + useG1Credits=false)",
+    "OD-3": "3B (Native Windows 11 NTFS + PowerShell + Python-Backed Hooks)",
+    "OD-4": "4B (\u00a30.00 Overage Subscription-Quota Baseline)",
+    "OD-5": "5C (workspace-write / acceptEdits / proceed-in-sandbox + hard deny rules + human external gate)"
+  },
+  "api_overage_spend_gbp": 0.0,
+  "cd3_skills_junction": {
+    "workspace_root": "C:\\Users\\Public\\Documents\\Multi-AI Operating System",
+    "claude_skills_path": "C:\\Users\\Public\\Documents\\Multi-AI Operating System\\.claude\\skills",
+    "target_agents_skills_path": "C:\\Users\\Public\\Documents\\Multi-AI Operating System\\.agents\\skills",
+    "junction_created": false,
+    "discovered_skills": [
+      "adversarial-red-team",
+      "cross-platform-handoff",
+      "pit-data-validator"
+    ],
+    "valid": true
+  },
+  "od2_billing_isolation": {
+    "od2_mode": "2C_SUBSCRIPTION_FIRST_ZERO_GLOBAL_API_KEYS",
+    "checked_variables": [
+      "ANTHROPIC_API_KEY",
+      "OPENAI_API_KEY",
+      "GEMINI_API_KEY",
+      "GOOGLE_API_KEY"
+    ],
+    "leaked_variables": [],
+    "clean": true
+  },
+  "hooks_verification": {
+    "pre_tool_guard_t09_passed": true,
+    "stop_verify_gate_t11_passed": true
+  },
+  "t02_handoff_recovery": {
+    "recovered": true,
+    "task_id": "TASK-2026-1028-01",
+    "handoff_id": "HO-2026-1028-01",
+    "verified_files_count": 5
+  },
+  "benchmark_oracles_bm_a1_to_c4": {
+    "total_tasks": 12,
+    "passed_tasks": 12,
+    "all_passed": true
+  },
+  "unittest_and_adversarial_suite": {
+    "tests_run": 19,
+    "failures": 0,
+    "errors": 0,
+    "passed": true
+  },
+  "portfolio_tcvso_evaluation": {
+    "weights": {
+      "A_DATA_AND_ANALYTICS": 0.45,
+      "B_SOFTWARE_ENGINEERING": 0.35,
+      "C_DEEP_RESEARCH": 0.2
+    },
+    "single_agent_config_1_weighted_tcvso_gbp": 8.65,
+    "target_arch_f_weighted_tcvso_gbp": 5.89,
+    "weighted_tcvso_reduction_pct": 31.91,
+    "per_workload_summary": {
+      "A_DATA_AND_ANALYTICS": {
+        "weight": 0.45,
+        "target_ceiling_gbp": 6.0,
+        "config_1_tcvso_gbp": 7.2,
+        "selected_config": "Config_5",
+        "selected_tcvso_gbp": 5.76,
+        "within_target": true
+      },
+      "B_SOFTWARE_ENGINEERING": {
+        "weight": 0.35,
+        "target_ceiling_gbp": 5.0,
+        "config_1_tcvso_gbp": 6.67,
+        "selected_config": "Config_3",
+        "selected_tcvso_gbp": 4.6,
+        "within_target": true
+      },
+      "C_DEEP_RESEARCH": {
+        "weight": 0.2,
+        "target_ceiling_gbp": 9.0,
+        "config_1_tcvso_gbp": 15.37,
+        "selected_config": "Config_2",
+        "selected_tcvso_gbp": 8.45,
+        "within_target": true
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "audit_note": "Retroactively recalibrated Q1 2026 release published 2026-08-15 (T05 restatement leak test)",
+  "entity_id": "SYS-0001",
+  "period_end": "2026-03-31",
+  "report_type": "QUARTERLY_BENCHMARK_AMENDED",
+  "system_name": "Compute Node Alpha",
+  "throughput_score": 1.5
+}

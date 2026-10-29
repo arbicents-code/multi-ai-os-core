@@ -1,0 +1,8 @@
+{
+  "audit_note": "Initial Q1 2026 telemetry release prior to August 2026 retroactive recalibration",
+  "entity_id": "SYS-0001",
+  "period_end": "2026-03-31",
+  "report_type": "QUARTERLY_BENCHMARK",
+  "system_name": "Compute Node Alpha",
+  "throughput_score": 1.0
+}

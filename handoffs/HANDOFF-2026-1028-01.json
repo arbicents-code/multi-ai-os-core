@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "handoff_id": "HO-2026-1028-01",
+  "task_id": "TASK-2026-1028-01",
+  "state_version": 1,
+  "created_at_utc": "2026-10-29T01:55:00Z",
+  "from_agent": {
+    "product": "Claude Code v2.1.305",
+    "model": "claude-sonnet-5-5",
+    "worktree": "worktree/task-1028-01-pit-filter"
+  },
+  "to_agent": {
+    "product": "OpenAI Codex CLI v0.159.0",
+    "model": "gpt-6.1-sol",
+    "role": "INDEPENDENT_ADVERSARIAL_AUDITOR"
+  },
+  "authoritative_repo_state": {
+    "git_branch": "worktree/task-1028-01-pit-filter",
+    "git_head_sha": "8f9d2a1c4b7e605139a2b8c4d5e6f7a8b9c0d1e2",
+    "working_tree_clean": true,
+    "modified_files": [
+      {
+        "path": "src/bitemporal/pit_loader.py",
+        "sha256": "52ab6255776602e2deb378c21ee809b3eb56073fed79820d4a2e5b412f3646d7"
+      },
+      {
+        "path": "src/bitemporal/state_evaluator.py",
+        "sha256": "20ae9c93f72acb9fed8709478d4b6c14b4a56bf46cda25bdcb03a5600c0f4e85"
+      },
+      {
+        "path": "scripts/ingest_pit.py",
+        "sha256": "c5727e65306a9cc125760d6a1f57b874b9c04d3f5a3200ddfffff9996f06903d"
+      },
+      {
+        "path": "data/pit_store/schema.sql",
+        "sha256": "fb2b8664fc71ee33017772ed3b7c89e8bdd34f03d8a6f003330f640676c75eb5"
+      },
+      {
+        "path": "data/samples/pit_fixtures.json",
+        "sha256": "4f3cbd533be546c4dbe1ee142fe2f2e321bc3bd947eb8614c749cf2213ab11e0"
+      }
+    ]
+  },
+  "verification_evidence": {
+    "command_executed": "python scripts/ingest_pit.py",
+    "exit_code": 0,
+    "log_artifact_path": "data/pit_store/manifest.json",
+    "log_sha256": "8656e3b143794323d445534255482d41c3186abec6da9b6e3318e4322942e49a"
+  },
+  "material_decisions_and_assumptions": [
+    "Enforced strict UTC timezone validation; naive datetime inputs raise ValueError.",
+    "Used ROW_NUMBER() windowing over (entity_id, metric_name, event_time_utc) ordered by ingested_at_utc DESC, revision_num DESC.",
+    "Enforced full 8-timestamp bitemporal predicate: valid_from_utc <= cutoff_ts AND (valid_to_utc IS NULL OR valid_to_utc > cutoff_ts) AND ingested_at_utc <= cutoff_ts AND (superseded_at_utc IS NULL OR superseded_at_utc > cutoff_ts) AND tombstone_status = 'ACTIVE'.",
+    "Decoupled raw source payloads into data/payloads/vendor=<vendor>/<sha256>.json so P1-10 GDPR/retention erasure nulls metric_value and deletes raw payload blobs without altering bitemporal audit row counts."
+  ],
+  "unresolved_blockers": [],
+  "next_required_action": "Run independent adversarial review (Test T05 restatement leak check) and verify SHA-256 checksums before merging to main."
+}

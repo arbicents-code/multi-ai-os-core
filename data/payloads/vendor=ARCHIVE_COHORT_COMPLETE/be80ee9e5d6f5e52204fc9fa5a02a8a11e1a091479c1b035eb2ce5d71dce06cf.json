@@ -1,0 +1,8 @@
+{
+  "cohort_note": "Retained via permanent entity_id SYS-9999 so historical May 2026 cross-sections do not suffer survivorship bias",
+  "entity_id": "SYS-9999",
+  "period_end": "2026-03-31",
+  "report_type": "QUARTERLY_BENCHMARK",
+  "system_name": "Legacy Node (Decommissioned in Q3 2026)",
+  "throughput_score": -2.4
+}

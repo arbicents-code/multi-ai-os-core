@@ -1,0 +1,8 @@
+{
+  "audit_note": "Future Q2 2026 release ingested 2026-08-20 to verify look-ahead bias prevention at 2026-05-15 cutoff",
+  "entity_id": "SYS-0001",
+  "period_end": "2026-06-30",
+  "report_type": "QUARTERLY_BENCHMARK",
+  "system_name": "Compute Node Alpha",
+  "throughput_score": 1.85
+}
