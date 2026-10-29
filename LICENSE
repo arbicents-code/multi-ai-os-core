@@ -1,0 +1,44 @@
+PROPRIETARY & COMMERCIAL SOURCE-AVAILABLE LICENSE
+Evidence-Validated Multi-AI Operating System (`multi-ai-os-core`)
+
+Copyright (c) 2026 arbicents-code. All Rights Reserved.
+
+1. OWNERSHIP & INTELLECTUAL PROPERTY
+All source code, architectural specifications, bitemporal Point-in-Time (PIT)
+schemas, Total Cost per Verified Successful Outcome (TCVSO) routing engines,
+C#/.NET deterministic runtime guards, verification oracles, cross-platform
+handoff schemas, hooks, and documentation in this repository (collectively,
+the "Software") are the exclusive proprietary intellectual property of
+arbicents-code ("Licensor") and are protected by international copyright,
+trade secret, and intellectual property laws.
+
+2. RESTRICTED EVALUATION & PERSONAL INSPECTION GRANT
+If this repository is made publicly visible on a hosting platform (such as
+GitHub), Licensor grants you a revocable, non-exclusive, non-transferable,
+royalty-free right solely to view and inspect the Software for personal
+evaluation and non-commercial review.
+
+3. COMMERCIAL & PRODUCTION PROHIBITIONS
+Without a separate written Commercial License Agreement executed by Licensor,
+you may NOT:
+  (a) Use the Software, in whole or in part, in any commercial, production,
+      enterprise, revenue-generating, or internal business environment;
+  (b) Redistribute, sublicense, sell, lease, host, or offer the Software (or
+      any derivative work, template, or managed service based on the Software)
+      to any third party;
+  (c) Remove, alter, or obscure any copyright, trademark, provenance, or
+      attribution notices in the Software.
+
+4. COMMERCIAL LICENSING INQUIRIES
+To purchase a commercial, enterprise, or team license for `multi-ai-os-core`,
+please contact the copyright holder via:
+https://github.com/arbicents-code
+
+5. DISCLAIMER OF WARRANTY & LIMITATION OF LIABILITY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER OR AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
+OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

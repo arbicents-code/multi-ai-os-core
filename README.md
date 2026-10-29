@@ -27,6 +27,7 @@ An evidence-validated, domain-agnostic Multi-AI Operating System orchestrating *
 multi-ai-os-core/
 ├── AGENTS.md                        # Canonical Tier-1 operational policy (<120 lines, <6 KB)
 ├── CLAUDE.md                        # Claude Code entry point (@AGENTS.md import + quick commands)
+├── LICENSE                          # Proprietary & Commercial Source-Available License
 ├── GOALS.md / PLANS.md / DECISIONS.md # Programme governance, roadmap, and architectural decisions
 ├── .agents/                         # Cross-platform skills (SKILL.md) and scoped rules
 ├── .claude/                         # Claude Code settings, hooks, and symlinked skills
@@ -80,3 +81,11 @@ dotnet run --project src/runtime/
 
 - **Protected Paths (`scripts/hooks/pre_tool_guard.py`):** Reading or writing `.env*`, `~/.ssh/**`, `~/.aws/**`, `**/credentials*`, `secrets/**`, or mutating `data/raw/**` and `.git/config` is deterministically blocked (`exit code 2`).
 - **Destructive & External Commands:** `rm -rf`, `git push --force`, `git reset --hard`, and autonomous remote pushes are blocked by policy (`OD-5 = 5C`). Remote synchronization (`git push`) is strictly human-executed.
+
+---
+
+## 5. License
+
+Copyright © 2026 `arbicents-code`. All Rights Reserved.
+Licensed under the **Proprietary & Commercial Source-Available License** — see [`LICENSE`](LICENSE) for full terms and commercial licensing details.
+
